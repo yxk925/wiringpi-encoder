@@ -4,8 +4,11 @@
 
 int main()
 {
-    Encoder enc1(0, 7);
-    Encoder enc2(2, 3);
+    std::cout << "Begin ..." << std::endl;
+    Encoder enc1(12, 11);
+    Encoder enc2(4, 3);
+
+    std::cout << "init finished." << std::endl;
 
     int read1 = 0;
     int pastRead1 = 0;

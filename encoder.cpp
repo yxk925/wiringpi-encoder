@@ -1,26 +1,38 @@
 #include "encoder.h"
 #include <wiringPi.h>
 #include <vector>
+#include <iostream>
 
 Encoder::Encoder(unsigned char pinALoc, unsigned char pinBLoc)
     : pinA{pinALoc}, pinB{pinBLoc}
 {
+    
+    std::cout << "wiringPiSetup ...";
     wiringPiSetup();
+    std::cout << " done" << std::endl;
+
+    std::cout << "pinMode " << (int)pinA << ", " << (int)pinB << " for INPUT ...";
     pinMode(pinA, INPUT);
+    std::cout << " done" << std::endl;
+
     pinMode(pinB, INPUT);
 
     position = 0;
     state = 0;
 
+    std::cout << "digitalRead " << pinA << " ...";
     if (digitalRead(pinA))
     {
         state |= 1;
     }
+    std::cout << " done" << std::endl;
     if (digitalRead(pinB))
     {
         state |= 2;
     }
+    std::cout << "registerCallback " << pinA << " ...";
     registerCallback();
+    std::cout << " done" << std::endl;
 }
 
 int Encoder::read()
@@ -65,6 +77,7 @@ std::vector<Encoder *> lookupTable;
 
 void Encoder::registerCallback()
 {
+    std::cout << "[Encoder]registerCallback" << std::endl;
     lookupTable.push_back(this);
     switch (pinA)
     {
@@ -257,6 +270,7 @@ void Encoder::registerCallback()
 
 void update(unsigned char pin)
 {
+    // std::cout << "[encode]update " << (int)pin << std::endl;
     for (int i = 0; i < lookupTable.size(); i++)
     {
         if (lookupTable.at(i)->pinA == pin || lookupTable.at(i)->pinB == pin) //found the encoder which is interrupting

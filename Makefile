@@ -28,7 +28,7 @@ endif
 
 #DEBUG	= -g -O0
 DEBUG	= -O3
-CC	= gcc
+CC	= g++
 INCLUDE	= -I/usr/local/include
 CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe
 
@@ -38,12 +38,29 @@ LDLIBS    = -lwiringPi -lwiringPiDev -lpthread -lm -lcrypt -lrt
 # Should not alter anything below this line
 ###############################################################################
 
-SRC	= encoder.cpp encoderTest.cpp
+SRC	= encoder.cpp \
+	  encoderTest.cpp \
+	  digitalTest.cpp
 
-OBJ	= encoder.o encoderTest.o
+OBJ	=	$(SRC:.cpp=.o)
 
-test: $(OBJ)
-	g++ $(OBJ) -o test.out $(LDFLAGS) $(LDLIBS)
+BINS	= encoderTest 
+
+view-all:	
+	$Q echo "OBJ=$(OBJ)" | fmt
+	$Q echo "BINS=$(BINS)" | fmt
+	$Q echo ""
+
+all:	$(BINS)
+
+	
+encoderTest: $(OBJ)
+	$(CC) encoder.o encoderTest.o -o encoderTest $(LDFLAGS) $(LDLIBS)
  
-$(OBJ): $(SRC)
-	g++ -c $(SRC) $(CFLAGS) -o $(OBJ) 
+digitalTest: digitalTest.o
+	$(CC) digitalTest.o -o digitalTest $(LDFLAGS) $(LDLIBS)
+ 
+
+.cpp.o:
+	$Q echo [CC] $<
+	$Q $(CC) -c $(CFLAGS) $< -o $@
