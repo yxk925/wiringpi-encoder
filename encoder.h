@@ -12,6 +12,7 @@ class Encoder
     Encoder(unsigned char pinALoc, unsigned char pinBLoc);
 
     int read();
+    void write(int p);
 
     void registerCallback();
 };

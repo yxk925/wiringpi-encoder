@@ -40,6 +40,11 @@ int Encoder::read()
     return position;
 }
 
+void Encoder::write(int p)
+{
+    position = p;
+}
+
 void update(unsigned char pin);
 
 void interrupt0(void) { update(0); }
